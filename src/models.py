@@ -14,57 +14,49 @@ class Person(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(250), nullable=False)
 
-class Address(Base):
-    __tablename__ = 'address'
-    # Here we define columns for the table address.
-    # Notice that each column is also a normal Python instance attribute.
-    id = Column(Integer, primary_key=True)
-    street_name = Column(String(250))
-    street_number = Column(String(250))
-    post_code = Column(String(250), nullable=False)
-    person_id = Column(Integer, ForeignKey('person.id'))
-    person = relationship(Person)
-
-    def to_dict(self):
-        return {}
-    
 class User(Base):
     __tablename__ = 'user'
     id = Column(Integer, primary_key=True)
-    username = Column(String(250), nullable=False)
-    email = Column(String(250), nullable=False)
-    password = Column(String(250), nullable=False)
+    username = Column(String(80), nullable=False)
+    email = Column(String(120), nullable=False)
+    password = Column(String(30), nullable=False)
     person_id = Column(Integer, ForeignKey('person.id'))
     person = relationship(Person)
 
 class character(Base):
     __tablename__ = 'character'
     id = Column(Integer, primary_key=True)
-    name = Column(String(250))
+    name = Column(String(200))
     age = Column(Integer)
     height = Column(Float)
-    gender = Column(String(250))
-    affiliation = Column(String(250))
+    gender = Column(String(80))
+    affiliation = Column(String(150))
 
 class planet(Base):
     __tablename__ = 'planet'
     id = Column(Integer, primary_key=True)
-    name = Column(String(250))
+    name = Column(String(200))
     mass = Column(Float)
     diameter = Column(Float)
     atmosphere = Column(Float)
     orbital_period_year = Column(Float)
     orbital_period_day = Column(Float)
 
-class Favorites(Base):
-    __tablename__ = 'favorites'
+class Favourite_planets(Base):
+    __tablename__ = 'favourite_planets'
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('user.id'))
+    user = relationship(User)
+    planet_id = Column(Integer, ForeignKey('planet.id'))
+    planet = relationship(planet)
+
+class Favourite_characters(Base):
+    __tablename__ = 'favourite_characters'
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship(User)
     character_id = Column(Integer, ForeignKey('character.id'))
     character = relationship(character)
-    planet_id = Column(Integer, ForeignKey('planet.id'))
-    planet = relationship(planet)
 
 ## Draw from SQLAlchemy base
 render_er(Base, 'diagram.png')
